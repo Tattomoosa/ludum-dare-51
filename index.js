@@ -249,9 +249,11 @@ const setup = () => {
   const canvas = setupDrawingCanvas();
   const round = setupRounds(timer, canvas);
   const startButton = document.querySelector("#start-button");
+  const clearButton = document.querySelector("#clear-button");
   const restartButton = document.querySelector("#restart-button");
   startButton.onclick = round.start
   restartButton.onclick = round.start
+  clearButton.onclick = canvas.clear
 
   window.debug = {
     timer,

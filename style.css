@@ -45,6 +45,15 @@ canvas {
   padding: 10px 25px;
 }
 
+.art-school-logo {
+	color: #333;
+	font-weight: 900;
+	position: absolute;
+	top: 34px;
+	right: 80px;
+	font-size: 30px;
+}
+
 input[type=button] {
 	height: 60px;
 	font-size: 20px;
@@ -109,7 +118,7 @@ input[type=button] {
 	text-align: center;
 	font-size: 40px;
 	height: 70px;
-	color: black;
+	color: #333;
 }
 
 .gallery-img-container {
@@ -150,6 +159,8 @@ input[type=button] {
 }
 
 #restart-button {
+}
+.right-button {
   width: 120px;
   position: absolute;
   right: 25px;
@@ -170,10 +181,8 @@ input[type=button] {
 }
 
 .art-genius-banner {
-	color: black;
 	font-size: 80px;
 	position: absolute;
-	text-decoration: underline;
 	top: 0;
 	left: 50%;
 	transform: translate3d(-50%, 0, 0);
