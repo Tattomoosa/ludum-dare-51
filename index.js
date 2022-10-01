@@ -1,5 +1,5 @@
 const TIME_LIMIT = 10; // seconds
-const NUM_ROUNDS = 10;
+const NUM_ROUNDS = 6;
 const TIMER_COMPLETE_EVENT = "timer-complete-event";
 const MIN_SCORE = 0;
 const MAX_SCORE = 100;
@@ -18,6 +18,9 @@ const TIMER_SETTINGS = {
     style: null,
   },
 };
+
+document.querySelector("#time-limit").innerHTML = TIME_LIMIT;
+document.querySelector("#num-rounds").innerHTML = NUM_ROUNDS;
 
 const getRandomBetween = (min, max) => Math.random() * (max - min) + min;
 
@@ -39,8 +42,9 @@ const setupDrawingCanvas = () => {
   window.onresize = onResize;
 
   // draws lines (whoa)
-  const drawLine = (startPoint, endPoint, width = 4) => {
+  const drawLine = (startPoint, endPoint, width = 8) => {
     ctx.lineWidth = width;
+		ctx.lineCap = "round";
     ctx.beginPath();
     ctx.moveTo(startPoint.x, startPoint.y);
     ctx.lineTo(endPoint.x, endPoint.y);
@@ -50,8 +54,11 @@ const setupDrawingCanvas = () => {
   var previousMousePosition = null;
   var shouldDraw = false;
 
-  window.addEventListener("mousedown", (_) => (shouldDraw = true));
-  window.addEventListener("mouseup", (_) => (shouldDraw = false));
+  window.addEventListener("mousedown", (_) => {
+		shouldDraw = true;
+		drawLine(previousMousePosition, previousMousePosition);
+	});
+  window.addEventListener("mouseup", (_) => {shouldDraw = false});
 
   window.addEventListener("mousemove", (e) => {
     const mousePosition = {
@@ -112,24 +119,48 @@ const setupTimer = () => {
 };
 
 const setupRounds = (timer, canvas) => {
+	// setup AI voice & subtitles
   const msg = new SpeechSynthesisUtterance();
+	const subtitlesShadowboxElement = document.querySelector(".subtitle-shadowbox");
+	const subtitlesElement = document.querySelector("#subtitles");
+	msg.onstart = () => {
+		subtitlesElement.innerHTML = msg.text;
+		subtitlesShadowboxElement.classList.remove("display-none");
+	}
+	msg.onend = () => {
+		subtitlesShadowboxElement.classList.add("display-none");
+	}
+
+	const speak = (text, interrupt=true) => {
+		msg.text = text;
+		if (interrupt)
+			window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(msg);
+	}
+
 	// for gallery at the end, save each image drawn
 	const roundImages = [];
 	var roundCount = 0;
 	var pointsCount = 0;
+
 	const roundCountElement = document.querySelector("#round-count");
 	const pointsCountElement = document.querySelector("#points-count");
+
   const startRound = () => {
     canvas.clear();
     timer.restart();
   };
+
 	const galleryElement = document.querySelector("#gallery");
 	const galleryImageParent = document.querySelector("#gallery-images");
+	const drawingAreaElement = document.querySelector("#drawing-area");
+	const afterFinishUiElement = document.querySelector(".after-finish");
+
 	const finish = () => {
 		galleryElement.classList.remove("display-none")
 		document.querySelector(".during-rounds").classList.add("display-none")
-		document.querySelector("#drawing-area").classList.add("display-none")
-		document.querySelector(".after-finish").classList.remove("display-none")
+		drawingAreaElement.classList.add("display-none")
+		afterFinishUiElement.classList.remove("display-none")
 		document.querySelector("#final-score").innerHTML = pointsCount;
 		roundImages.forEach((img, i) => {
 			const imgContainerEl = document.createElement("div");
@@ -143,7 +174,9 @@ const setupRounds = (timer, canvas) => {
 			imgContainerEl.appendChild(el);
 			galleryImageParent.appendChild(imgContainerEl);
 		})
+		speak(`You scored ${pointsCount} points!`, false);
 	}
+
   const judge = () => {
     const score = Math.round(getRandomBetween(MIN_SCORE, MAX_SCORE));
     let statement = "";
@@ -156,6 +189,7 @@ const setupRounds = (timer, canvas) => {
       statement,
     };
   };
+
   window.addEventListener(TIMER_COMPLETE_EVENT, (_) => {
     const result = judge();
 		roundImages.push({
@@ -163,9 +197,7 @@ const setupRounds = (timer, canvas) => {
 			score: result.score,
 		});
 		// speak result
-    msg.text = result.statement;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(msg);
+		speak(result.statement);
 		// update round count
 		roundCount += 1;
 		roundCountElement.innerHTML = roundCount + 1;
@@ -177,13 +209,24 @@ const setupRounds = (timer, canvas) => {
 		else
 			finish();
   });
+
   return {
     start: () => {
+			// reset
 			roundCount = 0;
+			roundCountElement.innerHTML = roundCount + 1;
 			pointsCount = 0;
-			msg.text = "Begin!";
-			window.speechSynthesis.cancel();
-			window.speechSynthesis.speak(msg);
+			pointsCountElement.innerHTML = pointsCount;
+			roundImages.length = 0;
+			// announce
+			speak("Begin!");
+			// update dom
+			document.querySelector(".before-start").classList.add("display-none");
+			afterFinishUiElement.classList.add("display-none")
+			document.querySelector(".during-rounds").classList.remove("display-none");
+			drawingAreaElement.classList.remove("display-none");
+			galleryImageParent.innerHTML = "";
+			galleryElement.classList.add("display-none");
 			startRound();
 		},
   };
@@ -194,11 +237,9 @@ const setup = () => {
   const canvas = setupDrawingCanvas();
   const round = setupRounds(timer, canvas);
   const startButton = document.querySelector("#start-button");
-  startButton.onclick = () => {
-    document.querySelector(".before-start").classList.add("display-none");
-    document.querySelector(".during-rounds").classList.remove("display-none");
-    round.start();
-  };
+  const restartButton = document.querySelector("#restart-button");
+  startButton.onclick = round.start
+  restartButton.onclick = round.start
 
   window.debug = {
     timer,

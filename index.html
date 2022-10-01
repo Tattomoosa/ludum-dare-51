@@ -11,34 +11,43 @@
     <div class="fill">
       <div class="top-ui">
         <div class="before-start">
-					<input type="button" value="START!" id="start-button" />
-          &nbsp; &nbsp; &nbsp;
-          <div class="instructions-text">
-            You will have 10 seconds each to complete 10 drawings.<br />
-            Each will be judged and awarded points by our proprietary ART_GENIUS engine.<br />
-            Try to get a high score to be the best artist!
+					<div class="inline-block">
+						<input type="button" value="START!" id="start-button" />
+					</div>
+          <div class="inline-block instructions-text">
+            You will have <span id="time-limit">10</span> seconds each to complete <span id="num-rounds">10</span> drawings.<br />
+            Each will be judged and awarded points by the <span class="rainbow-text-animated">[ARTGENIUS]</span> engine.<br />
+            Try to get a high score to be the best artist!<br/>
+						Feel free to use the canvas to practice!
           </div>
         </div>
         <div class="during-rounds display-none">
 					<div class="round-counter">ROUND: <span id="round-count">1</span></div>
 					<div class="points-counter">POINTS: <span id="points-count">0</span></div>
+					<div class="art-genius-banner"><span class="rainbow-text-animated">[ARTGENIUS]</span></div>
           <div id="timer-container"></div>
         </div>
 				<div class="after-finish display-none">
 					<div class="results-text">
-						You scored <span id="final-score">0</span><br/>
-						You are the <span id="leaderboard-position">256</span>th best artist!
+						You scored <span id="final-score">0</span> points!<br/>
+						<!-- You are the <span id="leaderboard-position">256</span>th best artist! -->
 					</div>
+					<input type="button" value="TRY AGAIN" id="restart-button" />
 				</div>
       </div>
       <div class="drawing-area-container">
-        <canvas id="drawing-area"></canvas>
+				<!-- Gallery for after round -->
 				<div id="gallery" class="display-none">
 					<div class="gallery-heading">Your Work</div>
 					<div id="gallery-images">
 					</div>
 				</div>
+				<!-- Drawing Surface -->
+        <canvas id="drawing-area"></canvas>
       </div>
+			<div class="subtitle-shadowbox display-none">
+				<p id="subtitles">Testing the subtitle system...</p>
+			</div>
     </div>
     <script src="dependencies/progressbar.min.js"></script>
     <script src="index.js"></script>
