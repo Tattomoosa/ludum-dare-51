@@ -9,6 +9,18 @@ const POSITIVE_RESPONSES = ["I love it"];
 const NEUTRAL_RESPONSES = ["It is adequate"];
 const NEGATIVE_RESPONSES = ["I hate it"];
 
+const GLOBAL_SETTINGS = {
+  sound: true,
+  voice: true,
+};
+
+const onSoundToggleChange = (e) => {
+  GLOBAL_SETTINGS.sound = e.currentTarget.checked;
+};
+const onVoiceToggleChange = (e) => {
+  GLOBAL_SETTINGS.voice = e.currentTarget.checked;
+};
+
 const TIMER_SETTINGS = {
   strokeWidth: 10,
   color: "orange",
@@ -44,7 +56,7 @@ const setupDrawingCanvas = () => {
   // draws lines (whoa)
   const drawLine = (startPoint, endPoint, width = 8) => {
     ctx.lineWidth = width;
-		ctx.lineCap = "round";
+    ctx.lineCap = "round";
     ctx.beginPath();
     ctx.moveTo(startPoint.x, startPoint.y);
     ctx.lineTo(endPoint.x, endPoint.y);
@@ -55,10 +67,12 @@ const setupDrawingCanvas = () => {
   var shouldDraw = false;
 
   window.addEventListener("mousedown", (_) => {
-		shouldDraw = true;
-		drawLine(previousMousePosition, previousMousePosition);
-	});
-  window.addEventListener("mouseup", (_) => {shouldDraw = false});
+    shouldDraw = true;
+    drawLine(previousMousePosition, previousMousePosition);
+  });
+  window.addEventListener("mouseup", (_) => {
+    shouldDraw = false;
+  });
 
   window.addEventListener("mousemove", (e) => {
     const mousePosition = {
@@ -70,15 +84,14 @@ const setupDrawingCanvas = () => {
     previousMousePosition = mousePosition;
   });
 
-	const clear = () => {
-		ctx.fillStyle = "white";
+  const clear = () => {
+    ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
 
-
   return {
     clear,
-		toImage: () => canvas.toDataURL("image/png"),
+    toImage: () => canvas.toDataURL("image/png"),
   };
 };
 
@@ -119,75 +132,85 @@ const setupTimer = () => {
 };
 
 const setupRounds = (timer, canvas) => {
-	// setup AI voice & subtitles
+  // setup AI voice & subtitles
   const msg = new SpeechSynthesisUtterance();
-	const subtitlesShadowboxElement = document.querySelector(".subtitle-shadowbox");
-	const subtitlesElement = document.querySelector("#subtitles");
-	msg.onstart = () => {
-		subtitlesElement.innerHTML = msg.text;
-		subtitlesShadowboxElement.classList.remove("display-none");
-	}
-	msg.onend = () => {
-		subtitlesShadowboxElement.classList.add("display-none");
-	}
+  const subtitlesShadowboxElement = document.querySelector(
+    ".subtitle-shadowbox"
+  );
+  const subtitlesElement = document.querySelector("#subtitles");
+  msg.onstart = () => {
+    subtitlesElement.innerHTML = msg.text;
+    subtitlesShadowboxElement.classList.remove("display-none");
+  };
+  msg.onend = () => {
+    subtitlesShadowboxElement.classList.add("display-none");
+  };
 
-	const speak = (text, interrupt=true) => {
-		msg.text = text;
-		if (interrupt)
-			window.speechSynthesis.cancel();
+  const speak = (text, interrupt = true) => {
+    if (!GLOBAL_SETTINGS.voice) return;
+    msg.text = text;
+    if (interrupt) window.speechSynthesis.cancel();
     window.speechSynthesis.speak(msg);
-	}
+  };
 
-	// for gallery at the end, save each image drawn
-	const roundImages = [];
-	var roundCount = 0;
-	var pointsCount = 0;
+  // for gallery at the end, save each image drawn
+  const roundImages = [];
+  var roundCount = 0;
+  var pointsCount = 0;
 
-	const roundCountElement = document.querySelector("#round-count");
-	const pointsCountElement = document.querySelector("#points-count");
-	const finishedDrawingAnimationImg = document.querySelector("#finished-drawing-animation")
+  const roundCountElement = document.querySelector("#round-count");
+  const pointsCountElement = document.querySelector("#points-count");
+  const finishedDrawingAnimationImg = document.querySelector(
+    "#finished-drawing-animation"
+  );
+  const finishedDrawingPointsDisplay = document.querySelector(
+    "#finished-drawing-points-animation"
+  );
 
   const startRound = () => {
     canvas.clear();
     timer.restart();
-		if (roundImages.length > 0)
-		{
-			finishedDrawingAnimationImg.src = roundImages[roundImages.length - 1].src;
-			// finishedDrawingAnimationImg.classList.remove("display-none");
-			finishedDrawingAnimationImg.classList.add("animate");
-			setTimeout(() => {
-				finishedDrawingAnimationImg.src = "";
-				finishedDrawingAnimationImg.classList.remove("animate");
-				// finishedDrawingAnimationImg.classList.add("display-none");
-			}, 500)
-		}
+    if (roundImages.length > 0) {
+      const lastImg = roundImages[roundImages.length - 1];
+      finishedDrawingAnimationImg.src = lastImg.src;
+      finishedDrawingAnimationImg.classList.add("animate");
+      finishedDrawingPointsDisplay.classList.add("animate");
+      finishedDrawingPointsDisplay.innerHTML = "+" + lastImg.score;
+      setTimeout(() => {
+        finishedDrawingAnimationImg.src = "";
+        finishedDrawingAnimationImg.classList.remove("animate");
+        finishedDrawingPointsDisplay.classList.remove("animate");
+        finishedDrawingPointsDisplay.innerHTML = "";
+        // finishedDrawingAnimationImg.classList.add("display-none");
+      }, 1000);
+    }
   };
 
-	const galleryElement = document.querySelector("#gallery");
-	const galleryImageParent = document.querySelector("#gallery-images");
-	const drawingAreaElement = document.querySelector("#drawing-area");
-	const afterFinishUiElement = document.querySelector(".after-finish");
+  const galleryElement = document.querySelector("#gallery");
+  const galleryImageParent = document.querySelector("#gallery-images");
+  const drawingAreaElement = document.querySelector("#drawing-area");
+  const afterFinishUiElement = document.querySelector(".after-finish");
 
-	const finish = () => {
-		galleryElement.classList.remove("display-none")
-		document.querySelector(".during-rounds").classList.add("display-none")
-		drawingAreaElement.classList.add("display-none")
-		afterFinishUiElement.classList.remove("display-none")
-		document.querySelector("#final-score").innerHTML = pointsCount;
-		roundImages.forEach((img, i) => {
-			const imgContainerEl = document.createElement("div");
-			imgContainerEl.classList.add("gallery-img-container");
-			const imgHeadingEl = document.createElement("div")
-			imgHeadingEl.classList.add("gallery-img-heading");
-			imgHeadingEl.innerHTML = `Round ${i + 1}, ${img.score} points`;
-			const el = document.createElement("img");
-			el.src = img.src;
-			imgContainerEl.appendChild(imgHeadingEl)
-			imgContainerEl.appendChild(el);
-			galleryImageParent.appendChild(imgContainerEl);
-		})
-		speak(`You scored ${pointsCount} points!`, false);
-	}
+  const finish = () => {
+    galleryElement.classList.remove("display-none");
+    document.querySelector(".during-rounds").classList.add("display-none");
+    drawingAreaElement.classList.add("display-none");
+    afterFinishUiElement.classList.remove("display-none");
+    document.querySelector("#final-score").innerHTML = pointsCount;
+    roundImages.forEach((img, i) => {
+      const imgContainerEl = document.createElement("div");
+      imgContainerEl.classList.add("gallery-img-container");
+      const imgHeadingEl = document.createElement("div");
+      imgHeadingEl.classList.add("gallery-img-heading");
+      imgHeadingEl.innerHTML = `Round ${i + 1}, ${img.score} points`;
+      const el = document.createElement("img");
+      el.src = img.src;
+      imgContainerEl.appendChild(imgHeadingEl);
+      imgContainerEl.appendChild(el);
+      galleryImageParent.appendChild(imgContainerEl);
+    });
+    speak(`You scored ${pointsCount} points!`, false);
+  };
 
   const judge = () => {
     const score = ART_GENIUS_ENGINE();
@@ -204,43 +227,41 @@ const setupRounds = (timer, canvas) => {
 
   window.addEventListener(TIMER_COMPLETE_EVENT, (_) => {
     const result = judge();
-		roundImages.push({
-			src: canvas.toImage(),
-			score: result.score,
-		});
-		// speak result
-		speak(result.statement);
-		// update round count
-		roundCount += 1;
-		roundCountElement.innerHTML = roundCount + 1;
-		// update point count
-		pointsCount += result.score;
-		pointsCountElement.innerHTML = pointsCount;
-		if (roundCount < NUM_ROUNDS)
-			startRound();
-		else
-			finish();
+    roundImages.push({
+      src: canvas.toImage(),
+      score: result.score,
+    });
+    // speak result
+    speak(result.statement);
+    // update round count
+    roundCount += 1;
+    roundCountElement.innerHTML = roundCount + 1;
+    // update point count
+    pointsCount += result.score;
+    pointsCountElement.innerHTML = pointsCount;
+    if (roundCount < NUM_ROUNDS) startRound();
+    else finish();
   });
 
   return {
     start: () => {
-			// reset
-			roundCount = 0;
-			roundCountElement.innerHTML = roundCount + 1;
-			pointsCount = 0;
-			pointsCountElement.innerHTML = pointsCount;
-			roundImages.length = 0;
-			// announce
-			speak("Begin!");
-			// update dom
-			document.querySelector(".before-start").classList.add("display-none");
-			afterFinishUiElement.classList.add("display-none")
-			document.querySelector(".during-rounds").classList.remove("display-none");
-			drawingAreaElement.classList.remove("display-none");
-			galleryImageParent.innerHTML = "";
-			galleryElement.classList.add("display-none");
-			startRound();
-		},
+      // reset
+      roundCount = 0;
+      roundCountElement.innerHTML = roundCount + 1;
+      pointsCount = 0;
+      pointsCountElement.innerHTML = pointsCount;
+      roundImages.length = 0;
+      // announce
+      speak("Begin!");
+      // update dom
+      document.querySelector(".before-start").classList.add("display-none");
+      afterFinishUiElement.classList.add("display-none");
+      document.querySelector(".during-rounds").classList.remove("display-none");
+      drawingAreaElement.classList.remove("display-none");
+      galleryImageParent.innerHTML = "";
+      galleryElement.classList.add("display-none");
+      startRound();
+    },
   };
 };
 
@@ -251,9 +272,9 @@ const setup = () => {
   const startButton = document.querySelector("#start-button");
   const clearButton = document.querySelector("#clear-button");
   const restartButton = document.querySelector("#restart-button");
-  startButton.onclick = round.start
-  restartButton.onclick = round.start
-  clearButton.onclick = canvas.clear
+  startButton.onclick = round.start;
+  restartButton.onclick = round.start;
+  clearButton.onclick = canvas.clear;
 
   window.debug = {
     timer,

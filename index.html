@@ -1,62 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Art School</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="fill">
-			<div class="art-school-logo">art school</div>
-      <div class="top-ui">
-        <div class="before-start">
-					<div class="inline-block">
-						<input type="button" value="START!" id="start-button" />
-					</div>
-          <div class="inline-block instructions-text">
-            You will have <span id="time-limit">10</span> seconds each to complete <span id="num-rounds">10</span> drawings.<br />
-            Each will be judged and awarded points by the <span class="rainbow-text-animated">[ARTGENIUS]</span> engine.<br />
-            Try to get a high score to be the best artist!<br/>
-						Feel free to use the canvas to practice before we begin
-          </div>
-					<input type="button" value="CLEAR" id="clear-button" class="right-button"/>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Art School</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="fill">
+    <div class="art-school-logo">art school</div>
+    <div class="top-ui">
+      <div class="before-start">
+        <div class="inline-block">
+          <input type="button" value="START!" id="start-button" />
         </div>
-        <div class="during-rounds display-none">
-					<div class="round-counter">ROUND: <span id="round-count">1</span></div>
-					<div class="points-counter">POINTS: <span id="points-count">0</span></div>
-					<div class="art-genius-banner"><span class="rainbow-text-animated">[ARTGENIUS]</span></div>
-          <div id="timer-container"></div>
+        <div class="inline-block instructions-text">
+          You will have <span id="time-limit">10</span> seconds each to complete <span id="num-rounds">10</span>
+          drawings.<br />
+          Each will be judged and awarded points by the <span class="rainbow-text-animated">[ARTGENIUS]</span>
+          engine.<br />
+          Try to get a high score to be the best artist!<br />
+          Feel free to use the canvas to practice before we begin
         </div>
-				<div class="after-finish display-none">
-					<div class="results-text">
-						You scored <span id="final-score">0</span> points!<br/>
-						<!-- You are the <span id="leaderboard-position">256</span>th best artist! -->
-					</div>
-					<input type="button" value="TRY AGAIN" id="restart-button" class="right-button"/>
-				</div>
+        <input type="button" value="CLEAR" id="clear-button" class="right-button" />
       </div>
-      <div class="drawing-area-container">
-				<!-- Gallery for after round -->
-				<div id="gallery" class="display-none">
-					<div class="gallery-heading">Your Work</div>
-					<div id="gallery-images">
-					</div>
-				</div>
-				<img id="finished-drawing-animation"/>
-				<!-- Drawing Surface -->
-        <canvas id="drawing-area"></canvas>
+      <div class="during-rounds display-none">
+        <div class="round-counter">ROUND: <span id="round-count">1</span></div>
+        <div class="points-counter">POINTS: <span id="points-count">0</span></div>
+        <div class="art-genius-banner"><span class="rainbow-text-animated">[ARTGENIUS]</span></div>
+        <div id="timer-container"></div>
       </div>
-			<div class="subtitle-shadowbox display-none">
-				<p id="subtitles">Testing the subtitle system...</p>
-			</div>
+      <div class="after-finish display-none">
+        <div class="results-text">
+          You scored <span id="final-score">0</span> points!<br />
+          <!-- You are the <span id="leaderboard-position">256</span>th best artist! -->
+        </div>
+        <input type="button" value="TRY AGAIN" id="restart-button" class="right-button" />
+      </div>
     </div>
-    <footer>
-      Made by <a href="https://mattotousa.dev">Matt O'Tousa</a>
-      with 🗑️ and 🔥
-    </footer>
-    <script src="dependencies/progressbar.min.js"></script>
-    <script src="index.js"></script>
-  </body>
+    <div class="drawing-area-container">
+      <!-- Gallery for after round -->
+      <div id="gallery" class="display-none">
+        <div class="gallery-heading">Your Work</div>
+        <div id="gallery-images">
+        </div>
+      </div>
+      <img id="finished-drawing-animation" />
+      <div id="finished-drawing-points-animation"></div>
+      <!-- Drawing Surface -->
+      <canvas id="drawing-area"></canvas>
+    </div>
+    <div class="subtitle-shadowbox display-none">
+      <p id="subtitles">Testing the subtitle system...</p>
+    </div>
+  </div>
+  <footer>
+    Made by <a href="https://mattotousa.dev">Matt O'Tousa</a>
+    with 🗑️ and 🔥
+    |
+    <!--
+    music:
+    <label class="switch">
+      <input type="checkbox" checked onclick="onMusicToggleChange(event)">
+      <span class="slider round"></span>
+    </label>
+    -->
+    voice:
+    <label class="switch">
+      <input type="checkbox" checked onclick="onVoiceToggleChange(event)">
+      <span class="slider round"></span>
+    </label>
+  </footer>
+  <script src="dependencies/progressbar.min.js"></script>
+  <script src="index.js"></script>
+</body>
+
 </html>
