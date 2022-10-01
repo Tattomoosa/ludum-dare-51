@@ -178,3 +178,19 @@ input[type=button] {
 	left: 50%;
 	transform: translate3d(-50%, 0, 0);
 }
+
+#finished-drawing-animation {
+	pointer-events: none;
+	position: absolute;
+	inset: 20px;
+	opacity: 1;
+	z-index: 1000;
+	transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+}
+
+#finished-drawing-animation.animate {
+	/* transition: transform 2s, opacity 2s; */
+	transition: all 0.5s;
+	transform: scale3d(0.1, 0.1, 1) translate3d(0, -200%, 0) !important;
+	opacity: 0;
+}

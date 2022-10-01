@@ -145,10 +145,22 @@ const setupRounds = (timer, canvas) => {
 
 	const roundCountElement = document.querySelector("#round-count");
 	const pointsCountElement = document.querySelector("#points-count");
+	const finishedDrawingAnimationImg = document.querySelector("#finished-drawing-animation")
 
   const startRound = () => {
     canvas.clear();
     timer.restart();
+		if (roundImages.length > 0)
+		{
+			finishedDrawingAnimationImg.src = roundImages[roundImages.length - 1].src;
+			// finishedDrawingAnimationImg.classList.remove("display-none");
+			finishedDrawingAnimationImg.classList.add("animate");
+			setTimeout(() => {
+				finishedDrawingAnimationImg.src = "";
+				finishedDrawingAnimationImg.classList.remove("animate");
+				// finishedDrawingAnimationImg.classList.add("display-none");
+			}, 500)
+		}
   };
 
 	const galleryElement = document.querySelector("#gallery");
