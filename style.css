@@ -1,0 +1,113 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  background: #7eaac4;
+  color: white;
+	font-family: monospace;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+}
+
+.drawing-area-container {
+  position: absolute;
+  inset: 200px 60px 60px;
+}
+
+canvas {
+  background: #fafafa;
+}
+
+#timer-container {
+  width: 90px;
+  height: 90px;
+  position: absolute;
+  right: 25px;
+  top: 10px;
+}
+
+.top-ui {
+  height: 100px;
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  right: 60px;
+  background: black;
+  padding: 10px 25px;
+}
+
+#start-button {
+  height: 60px;
+  width: 80px;
+  border-radius: 0;
+  border: none;
+}
+
+.progressbar-text {
+  color: white;
+  position: absolute;
+  top: 20px;
+  left: 35px;
+  font-size: 40px;
+  font-family: monospace;
+}
+
+.round-counter-text {
+  color: white;
+  font-size: 40px;
+  font-family: monospace;
+}
+
+.display-none {
+  display: none;
+}
+
+.instructions-text {
+  display: inline-block;
+  position: relative;
+  top: 20px;
+}
+
+.round-counter, .points-counter {
+	display: absolute;
+	font-size: 40px;
+	font-family: monospace;
+}
+
+#gallery {
+	position: absolute;
+	inset: 0;
+	background: #efefef;
+	padding: 20px 40px;
+	overflow-y: scroll;
+}
+
+#gallery img {
+	max-width: 400px;
+	max-height: 400px;
+	width: auto;
+	height: auto;
+}
+
+.gallery-heading {
+	text-align: center;
+	font-size: 40px;
+	color: black;
+}
+
+.gallery-img-container {
+	max-width: 400px;
+	display: block;
+	font-size: 20px;
+	display: inline-block;
+	margin-right: 30px;
+}
+.gallery-img-heading {
+	background: black;
+}
