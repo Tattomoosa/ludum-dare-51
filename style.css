@@ -38,7 +38,7 @@ canvas {
 .top-ui {
   height: 100px;
   position: absolute;
-  top: 60px;
+  top: 40px;
   left: 60px;
   right: 60px;
   background: #333;
@@ -49,7 +49,7 @@ canvas {
 	color: #333;
 	font-weight: 900;
 	position: absolute;
-	top: 34px;
+	top: 14px;
 	right: 80px;
 	font-size: 30px;
 }
@@ -173,7 +173,7 @@ input[type=button] {
 	bottom: 0;
 	font-size: 30px;
 	left: 50%;
-	bottom: 10px;
+	bottom: 30px;
 	transform: translate3d(-50%, 0, 0);
 	padding: 20px;
 	pointer-events: none;
@@ -202,4 +202,12 @@ input[type=button] {
 	transition: all 0.5s;
 	transform: scale3d(0.1, 0.1, 1) translate3d(0, -200%, 0) !important;
 	opacity: 0;
+}
+
+footer {
+	position: absolute;
+	bottom: 12px;
+	font-size: 12px;
+	width: 100%;
+	text-align: center;
 }
