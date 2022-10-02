@@ -8,10 +8,12 @@ const POSITIVE_CUTOFF = 80;
 const POSITIVE_RESPONSES = ["I love it"];
 const NEUTRAL_RESPONSES = ["It is adequate"];
 const NEGATIVE_RESPONSES = ["I hate it"];
+const SLIDERS = [""]
 
 const GLOBAL_SETTINGS = {
   sound: true,
   voice: true,
+  subtitles: false,
 };
 
 const onSoundToggleChange = (e) => {
@@ -19,6 +21,9 @@ const onSoundToggleChange = (e) => {
 };
 const onVoiceToggleChange = (e) => {
   GLOBAL_SETTINGS.voice = e.currentTarget.checked;
+};
+const onSubtitlesToggleChange = (e) => {
+  GLOBAL_SETTINGS.subtitles = e.currentTarget.checked;
 };
 
 const TIMER_SETTINGS = {
@@ -35,6 +40,10 @@ document.querySelector("#time-limit").innerHTML = TIME_LIMIT;
 document.querySelector("#num-rounds").innerHTML = NUM_ROUNDS;
 
 const getRandomBetween = (min, max) => Math.random() * (max - min) + min;
+
+const setupArtGeniusSliders = () => {
+  
+}
 
 const setupDrawingCanvas = () => {
   const canvasContainer = document.querySelector(".drawing-area-container");
@@ -342,4 +351,6 @@ A WITHERED HUSK. PRAISE HIGH Y'AH-G'NATHLU, PRAISE HIGH OUR LAWYERS!!!!!!
 function ART_GENIUS_ENGINE(_input) {
   return Math.round(getRandomBetween(MIN_SCORE, MAX_SCORE));
 }
-// lol thanks for checking out the source have a happy ldjam 51
+// YOU WIN!
+// lol thanks so much for playing this shitpost of a game, have a wonderful ldjam 51
+

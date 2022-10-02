@@ -20,10 +20,10 @@
         <div class="inline-block instructions-text">
           You will have <span id="time-limit">10</span> seconds each to complete <span id="num-rounds">10</span>
           drawings.<br />
-          Each will be judged and awarded points by the <span class="rainbow-text-animated">[ARTGENIUS]</span>
+          Each will be judged and awarded points by our proprietary <span class="rainbow-text-animated">[ARTGENIUS]</span>
           engine.<br />
           Try to get a high score to be the best artist!<br />
-          Feel free to use the canvas to practice before we begin
+          Feel free to take your time, adjust settings on the bottom, and draw on the canvas to practice before we begin
         </div>
         <input type="button" value="CLEAR" id="clear-button" class="right-button" />
       </div>
@@ -71,6 +71,11 @@
     voice:
     <label class="switch">
       <input type="checkbox" checked onclick="onVoiceToggleChange(event)">
+      <span class="slider round"></span>
+    </label>
+    subtitles:
+    <label class="switch">
+      <input type="checkbox" checked onclick="onSubtitlesToggleChange(event)">
       <span class="slider round"></span>
     </label>
   </footer>

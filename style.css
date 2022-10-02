@@ -88,9 +88,11 @@ input[type=button] {
 }
 
 .instructions-text {
-  display: inline-block;
-	vertical-align: top;
-	margin-top: 10px;
+  position: absolute;
+	inset: 10px 130px;
+	overflow-y: scroll;
+	/* vertical-align: top; */
+	/* margin-top: 10px; */
 }
 
 .round-counter, .points-counter {
@@ -159,9 +161,10 @@ input[type=button] {
 }
 
 #restart-button {
+  width: 120px;
 }
 .right-button {
-  width: 120px;
+  width: 80px;
   position: absolute;
   right: 25px;
   top: 30px;
@@ -181,7 +184,7 @@ input[type=button] {
 }
 
 .art-genius-banner {
-	font-size: 80px;
+	font-size: 20px;
 	position: absolute;
 	top: 0;
 	left: 50%;
@@ -254,7 +257,7 @@ footer {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #224;
+  background-color: #422;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -266,13 +269,13 @@ footer {
   width: 10px;
   left: 1px;
   bottom: 2px;
-  background-color: rgba(255,255,255, 0.5);
+  background-color: #c66;
   -webkit-transition: .4s;
   transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #363;
+  background-color: #575;
 }
 
 input:focus + .slider {
@@ -281,6 +284,7 @@ input:focus + .slider {
 
 input:checked + .slider:before {
   transform: translateX(8px);
+  background-color: #6c6;
 }
 
 /* Rounded sliders */
